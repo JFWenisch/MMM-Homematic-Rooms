@@ -78,10 +78,10 @@ Module.register('MMM-Homematic-Rooms',
 				td.appendChild(document.createTextNode(room.name));
 				td.appendChild(document.createElement("br"));
 				td.appendChild(document.createTextNode(room.sensors.length +" sensors"));
+				td.appendChild(document.createElement("br"));
 				for (let j = 0; j < room.temperature.length; j++) 
 				{
-					td.appendChild(document.createElement("br"));
-					let heaterImg = new Image(20,20);
+					let heaterImg = new Image(20,20);					
 					heaterImg.src = 'https://image.flaticon.com/icons/svg/281/281308.svg';
 					td.appendChild(heaterImg);
 				}
