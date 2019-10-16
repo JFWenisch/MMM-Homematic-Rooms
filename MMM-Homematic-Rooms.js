@@ -63,10 +63,10 @@ Module.register('MMM-Homematic-Rooms',
 				var row = document.createElement('tr');
 
 				row.className = evenRow ? 'evenrow' : 'oddrow';
-				
+
 				var imageColumn = document.createElement("TD");
-				imageColumn.className="imageColumn";
-				var img = new Image(50, 50);
+				imageColumn.className = "imageColumn";
+				var img = new Image(30, 30);
 				img.src = 'https://visualpharm.com/assets/686/Room-595b40b85ba036ed117da28a.svg';
 				imageColumn.appendChild(img);
 				row.appendChild(imageColumn);
@@ -76,30 +76,33 @@ Module.register('MMM-Homematic-Rooms',
 				var room = this.rooms[i];
 				var td = document.createElement('TD');
 				td.appendChild(document.createTextNode(room.name));
-				td.appendChild(document.createElement("br"));
-				td.appendChild(document.createTextNode(room.sensors.length +" sensors"));
-				td.appendChild(document.createElement("br"));
-				for (let j = 0; j < room.temperature.length; j++) 
-				{
-					let heaterImg = new Image(20,20);					
-					heaterImg.src = 'https://image.flaticon.com/icons/svg/281/281308.svg';
+				td.appendChild(document.createElement("hr"));
+
+
+				
+				for (let j = 0; j < room.temperature.length; j++) {
+
+					let heaterImg = new Image(20, 20);
+					heaterImg.src = this.file("/img/heater_on.svg");
 					td.appendChild(heaterImg);
 				}
+			//	td.appendChild(document.createElement("br"));
+			//	td.appendChild(document.createTextNode(room.sensors.length + " sensors"));
 				row.appendChild(td);
 
-			
+
 				try {
 					var tempcolumn = document.createElement('TD');
 					tempcolumn.width = '50';
 					tempcolumn.appendChild(document.createTextNode(room.temperature[0].actualTemperature)); //Showing the temperature of the first found entity if set
 					row.appendChild(tempcolumn);
 
-				
 
-				//	var destTempcolumn = document.createElement('TD');
-				//	destTempcolumn.width = '50';
-				//	destTempcolumn.appendChild(document.createTextNode(room.temperature[0].setTemperature)); //Showing the temperature of the first found entity if set
-				//	row.appendChild(destTempcolumn);
+
+					//	var destTempcolumn = document.createElement('TD');
+					//	destTempcolumn.width = '50';
+					//	destTempcolumn.appendChild(document.createTextNode(room.temperature[0].setTemperature)); //Showing the temperature of the first found entity if set
+					//	row.appendChild(destTempcolumn);
 				}
 				catch (error) {
 					console.log("error");
@@ -118,7 +121,7 @@ Module.register('MMM-Homematic-Rooms',
 			this.rooms = [];
 
 			// Tell node_helper to load standings at startup.
-			this.sendSocketNotification('SET_CONNECTION',this.config.homematicURL);
+			this.sendSocketNotification('SET_CONNECTION', this.config.homematicURL);
 			this.sendSocketNotification('GET_DEVICES', {});
 
 

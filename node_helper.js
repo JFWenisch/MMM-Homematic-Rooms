@@ -255,6 +255,7 @@ module.exports = NodeHelper.create({
 							let temp = {
 								actualTemperature: actutalTemp, setTemperature: setTemp
 							};
+							config.rooms[i].temperature=[];
 							config.rooms[i].temperature.push(temp);
 						
 						
