@@ -1,0 +1,11 @@
+.MMM-Homematic-Rooms td {
+	padding-left: 6px;
+	padding-right: 6px;
+}
+
+.MMM-Homematic-Rooms.sensorInfo {
+
+}
+.MMM-Homematic-Rooms .imageColumn {
+	padding-right: 6px;
+}

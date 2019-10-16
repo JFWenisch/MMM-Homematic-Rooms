@@ -1,0 +1,27 @@
+{
+	"name": "MMM-Homematic-Rooms",
+	"version": "0.1.0",
+	"description": "A MagicMirror2 module that shows configured rooms and the assigned temperature via the ccu2 XMLAPI",
+	"keywords": [
+		"magic mirror",
+		"homematic",
+		"smarthome",
+		"ccu2"
+	],
+	"homepage": "https://github.com/JFWenisch/MMM-Homematic-Rooms.git#readme",
+	"bugs": {
+		"url": "https://github.com/JFWenisch/MMM-Homematic-Rooms.git/issues"
+	},
+	"license": "MIT",
+	"author": "J.-Fabian Wenisch",
+	"main": "MMM-Homematic-Rooms.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/JFWenisch/MMM-Homematic-Rooms"
+	},
+	"dependencies": {
+		"request": "^2.88.0",
+		"xmldom": "^0.1.27",
+		"xmlhttprequest": "^1.8.0"
+	}
+}
