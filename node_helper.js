@@ -121,6 +121,13 @@ module.exports = NodeHelper.create({
 			let heater = config.heaters[i];
 			self.updateRoomTemperatureFromHeater(heater);
 		}
+		/*
+		for (i = 0; i < config.windows.length; i++) 
+		{
+			let window = config.windows[i];
+			self.updateRoomTemperatureFromHeater(winde);
+		}
+		*/
 		},
 
 	updateRoomTemperatureFromHeater: function (deviceID) {
@@ -178,6 +185,77 @@ module.exports = NodeHelper.create({
 							let temp = {
 								actualTemperature: actutalTemp, setTemperature: setTemp
 							};
+							config.rooms[i].temperature.push(temp);
+						
+						
+						}
+					}
+				
+				}
+				self.sendSocketNotification('SET_TEMPERATURE',config.rooms);
+			}
+		}
+		request.open("GET", config.url+"/config/xmlapi/state.cgi?device_id=" + deviceID, true);
+		
+		request.send(null);;
+
+	},
+	updateRoomFromWIndow: function (deviceID) {
+		var self = this;
+		let	request = new XMLHttpRequest();
+		request.onreadystatechange = function () {
+			if (request.readyState == 4 && request.status == 200) {
+				xml = new DOMParser().parseFromString(request.responseText, "text/xml");
+
+				devices = xml.getElementsByTagName("device");
+				device = devices[0];
+				channels = device.getElementsByTagName("channel");
+
+				if (channels[4].getAttribute("name").includes(":4")) //Assuming Temperature information to be found below the channel ending with :4
+				{
+					let tempSensorID = channels[4].getAttribute("ise_id");
+					for (let i = 0; i < config.rooms.length; i++) {
+						room = config.rooms[i];
+						if (room.sensors.includes(tempSensorID)) {
+							dataPoints = channels[4].getElementsByTagName("datapoint");
+							for (let j = 0; j < dataPoints.length; j++)  //Scanning device datapoints to get actual tempurature and set temperature
+							{
+								dataPoint = dataPoints[j];
+								var actutalTemp;
+								var setTemp;
+								if (dataPoint.getAttribute("name").includes("ACTUAL_TEMPERATURE")) {
+									let tempvalue =dataPoint.getAttribute("value");
+									let tempunit=dataPoint.getAttribute("valueunit");
+									if(tempunit.includes("C"))
+									{
+										tempunit="°C"
+									}
+									else if(tempunit.includes("F"))
+									{
+										tempunit="°F"
+									}
+									actutalTemp = Number(tempvalue).toFixed(1) + " " + tempunit;
+								}
+								else if (dataPoint.getAttribute("name").includes("SET_TEMPERATURE")) {
+									let tempvalue =dataPoint.getAttribute("value");
+									let tempunit=dataPoint.getAttribute("valueunit");
+									if(tempunit.includes("C"))
+									{
+										tempunit="°C"
+									}
+									else if(tempunit.includes("F"))
+									{
+										tempunit="°F"
+									}
+									setTemp = Number(tempvalue).toFixed(1) + " " + tempunit;
+								}
+
+							}
+							console.log(device.getAttribute("name") + " is providing temperature data for " + room.name + "[" + actutalTemp + "/" + setTemp + "]");
+							let temp = {
+								actualTemperature: actutalTemp, setTemperature: setTemp
+							};
+							config.rooms[i].temperature=[];
 							config.rooms[i].temperature.push(temp);
 						
 						
