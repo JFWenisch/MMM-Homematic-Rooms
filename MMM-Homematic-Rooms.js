@@ -66,7 +66,7 @@ Module.register('MMM-Homematic-Rooms',
 				
 				var imageColumn = document.createElement("TD");
 				imageColumn.className="imageColumn";
-				var img = new Image(25, 25);
+				var img = new Image(50, 50);
 				img.src = 'https://visualpharm.com/assets/686/Room-595b40b85ba036ed117da28a.svg';
 				imageColumn.appendChild(img);
 				row.appendChild(imageColumn);
@@ -78,6 +78,13 @@ Module.register('MMM-Homematic-Rooms',
 				td.appendChild(document.createTextNode(room.name));
 				td.appendChild(document.createElement("br"));
 				td.appendChild(document.createTextNode(room.sensors.length +" sensors"));
+				for (let j = 0; j < room.temperature.length; j++) 
+				{
+					td.appendChild(document.createElement("br"));
+					let heaterImg = new Image(20,20);
+					heaterImg.src = 'https://image.flaticon.com/icons/svg/281/281308.svg';
+					td.appendChild(heaterImg);
+				}
 				row.appendChild(td);
 
 			
@@ -86,6 +93,8 @@ Module.register('MMM-Homematic-Rooms',
 					tempcolumn.width = '50';
 					tempcolumn.appendChild(document.createTextNode(room.temperature[0].actualTemperature)); //Showing the temperature of the first found entity if set
 					row.appendChild(tempcolumn);
+
+				
 
 				//	var destTempcolumn = document.createElement('TD');
 				//	destTempcolumn.width = '50';
