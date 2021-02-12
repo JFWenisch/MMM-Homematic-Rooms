@@ -44,7 +44,7 @@ module.exports = NodeHelper.create({
 		}
 		else if (notification === 'GET_TEMPERATURE')
 		{
-			self.initRealHeaters(payload);
+			self.initDeviceStatus(payload);
 		}
 		else if (notification === 'GET_DATA')
 		{
@@ -112,23 +112,81 @@ module.exports = NodeHelper.create({
 
 	},
 
-	initRealHeaters: function () 
+	initDeviceStatus: function () 
 	{
 		var self = this;
-		console.log("Searching sensor ids for previously found heaters.......")
+		console.log("Searching sensor ids and updating temperature for previously found heaters...")
 		for (i = 0; i < config.heaters.length; i++) 
 		{
 			let heater = config.heaters[i];
 			self.updateRoomTemperatureFromHeater(heater);
 		}
-		/*
-		for (i = 0; i < config.windows.length; i++) 
+		console.log("Searching sensor ids and updating state for previously found windows...")
+		for(var i =0; i < config.windows.length; i++)
 		{
-			let window = config.windows[i];
-			self.updateRoomTemperatureFromHeater(winde);
+			checkWindows(config.windows[i]);
 		}
-		*/
+
 		},
+		checkWindows: function (windowId) {
+{
+    var self = this;
+    let	request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4 && request.status == 200) {
+            xml = new DOMParser().parseFromString(request.responseText, "text/xml");
+
+            devices = xml.getElementsByTagName("device");
+            device = devices[0];
+            channels = device.getElementsByTagName("channel");
+
+            if (channels[1].getAttribute("name").includes(":1")) //Assuming Temperature information to be found below the channel ending with :4
+            {
+                let tempSensorID = channels[1].getAttribute("ise_id");
+                for (let i = 0; i < config.rooms.length; i++) {
+                    room = config.rooms[i];
+                    if (room.sensors.includes(tempSensorID)) {
+                        dataPoints = channels[1].getElementsByTagName("datapoint");
+                        for (let j = 0; j < dataPoints.length; j++)  //Scanning device datapoints to get actual tempurature and set temperature
+                        {
+                            dataPoint = dataPoints[j];
+                            var actutalTemp;
+                            var setTemp;
+                            if (dataPoint.getAttribute("name").includes("STATE")) {
+                                let tempvalue =dataPoint.getAttribute("value");
+                                if(tempvalue.includes("false"))
+                                {
+                                    tempvalue="closed"
+                                }
+                                else if(tempvalue.includes("true"))
+                                {
+                                    tempvalue="open"
+                                }
+                                let window = {
+                                    id: tempSensorID, state: tempvalue
+                                };
+                                config.rooms[i].windows.push(window);
+                                console.log(device.getAttribute("name") + " is a window with state "+tempvalue+" in room" + room.name );
+                            }
+                          
+
+                        }
+                     
+                      
+                       
+                    
+                    
+                    }
+                }
+            
+            }
+            //self.sendSocketNotification('SET_TEMPERATURE',config.rooms);
+        }
+    }
+    request.open("GET", config.url+"/config/xmlapi/state.cgi?device_id=" + windowId, true);
+    
+    request.send(null);; 
+},
 
 	updateRoomTemperatureFromHeater: function (deviceID) {
 		var self = this;
@@ -291,6 +349,7 @@ module.exports = NodeHelper.create({
 					room.name = roomNode.getAttribute("name");
 					room.id = roomNode.getAttribute("ise_id");
 					room.temperature = [];
+					room.windows=[];
 					roomDevicesNodes = roomNode.getElementsByTagName("channel");
 					for (let i = 0; i < roomDevicesNodes.length; i++) {
 						room.sensors.push(roomDevicesNodes[i].getAttribute("ise_id"));

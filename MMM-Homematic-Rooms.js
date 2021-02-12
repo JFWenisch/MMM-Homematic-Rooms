@@ -86,6 +86,12 @@ Module.register('MMM-Homematic-Rooms',
 					heaterImg.src = this.file("/img/heater_on.svg");
 					td.appendChild(heaterImg);
 				}
+				for (let j = 0; j < room.windows.length; j++) {
+
+					let windowsImg = new Image(20, 20);
+					windowsImg.src = this.file("/img/window_open.svg");
+					td.appendChild(windowsImg);
+				}
 			//	td.appendChild(document.createElement("br"));
 			//	td.appendChild(document.createTextNode(room.sensors.length + " sensors"));
 				row.appendChild(td);
