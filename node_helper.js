@@ -187,7 +187,7 @@ module.exports = NodeHelper.create({
     request.open("GET", config.url+"/config/xmlapi/state.cgi?device_id=" + windowId, true);
     
     request.send(null);; 
-}
+},
 
 	updateRoomTemperatureFromHeater: function (deviceID) {
 		var self = this;
