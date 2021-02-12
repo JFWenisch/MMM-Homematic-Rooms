@@ -66,7 +66,7 @@ Module.register('MMM-Homematic-Rooms',
 
 				var imageColumn = document.createElement("TD");
 				imageColumn.className = "imageColumn";
-				var img = new Image(30, 30);
+				var img = new Image(20, 20);
 				img.src = 'https://visualpharm.com/assets/686/Room-595b40b85ba036ed117da28a.svg';
 				imageColumn.appendChild(img);
 				row.appendChild(imageColumn);
@@ -82,14 +82,21 @@ Module.register('MMM-Homematic-Rooms',
 				
 				for (let j = 0; j < room.temperature.length; j++) {
 
-					let heaterImg = new Image(20, 20);
+					let heaterImg = new Image(16, 16);
 					heaterImg.src = this.file("/img/heater_on.svg");
 					td.appendChild(heaterImg);
 				}
 				for (let j = 0; j < room.windows.length; j++) {
 
-					let windowsImg = new Image(20, 20);
-					windowsImg.src = this.file("/img/window_open.svg");
+					let windowsImg = new Image(16, 16);
+					if(room.windows[j].state == 'open')
+					{
+						windowsImg.src = this.file("/img/window_open.svg");
+					}
+					else
+					{
+						windowsImg.src = this.file("/img/window_closed.svg");
+					}
 					td.appendChild(windowsImg);
 				}
 			//	td.appendChild(document.createElement("br"));
