@@ -89,6 +89,8 @@ Module.register('MMM-Homematic-Rooms',
 				for (let j = 0; j < room.windows.length; j++) {
 
 					let windowsImg = new Image(16, 16);
+					windowsImg.src = this.file("/img/window_closed.svg");
+					/*
 					if(room.windows[j].state == 'open')
 					{
 						windowsImg.src = this.file("/img/window_open.svg");
@@ -97,6 +99,7 @@ Module.register('MMM-Homematic-Rooms',
 					{
 						windowsImg.src = this.file("/img/window_closed.svg");
 					}
+					 */
 					td.appendChild(windowsImg);
 				}
 			//	td.appendChild(document.createElement("br"));
