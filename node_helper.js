@@ -5,7 +5,8 @@ var config = {
 	rooms: [{
 		name: "", id: "",
 		temperature: { actualTemperature: "", setTemperature: "" },
-		sensors: []
+		sensors: [],
+		windows:[],
 	}],
 	heaters: [],
 	windows: [],
@@ -124,12 +125,12 @@ module.exports = NodeHelper.create({
 		console.log("Searching sensor ids and updating state for previously found windows...")
 		for(var i =0; i < config.windows.length; i++)
 		{
-			checkWindows(config.windows[i]);
+			self.checkWindows(config.windows[i]);
 		}
 
 		},
 		checkWindows: function (windowId) {
-{
+
     var self = this;
     let	request = new XMLHttpRequest();
     request.onreadystatechange = function () {
@@ -186,7 +187,7 @@ module.exports = NodeHelper.create({
     request.open("GET", config.url+"/config/xmlapi/state.cgi?device_id=" + windowId, true);
     
     request.send(null);; 
-},
+}
 
 	updateRoomTemperatureFromHeater: function (deviceID) {
 		var self = this;
