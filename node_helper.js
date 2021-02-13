@@ -35,6 +35,7 @@ module.exports = NodeHelper.create({
 		}
 		if (notification === 'GET_DEVICES')
 		{
+			config.windows=[];
 			config.heaters=[];
 				self.loadDevices(payload);
 	
